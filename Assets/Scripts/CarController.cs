@@ -17,6 +17,16 @@ public class CarController : MonoBehaviour
     private float timer = 0f; // Timer to control switching
     private bool isSirenLightLeftOn = false;
 
+    // Siren audio
+    private AudioSource sirenAudio; // Reference to AudioSource for siren
+    private bool sirenActive = false;
+
+    void Start()
+    {
+        // Get the AudioSource component from the GameObject
+        sirenAudio = GetComponent<AudioSource>();
+    }
+
     void Update()
     {
         // Handle car movement
@@ -46,6 +56,27 @@ public class CarController : MonoBehaviour
 
             // Reset the timer
             timer = 0f;
+        }
+
+        // Toggle siren sound with Space key
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            sirenActive = !sirenActive;
+
+            if (sirenActive)
+            {
+                if (sirenAudio != null && !sirenAudio.isPlaying)
+                {
+                    sirenAudio.Play();
+                }
+            }
+            else
+            {
+                if (sirenAudio != null && sirenAudio.isPlaying)
+                {
+                    sirenAudio.Stop();
+                }
+            }
         }
     }
 }
