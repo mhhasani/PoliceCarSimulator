@@ -10,6 +10,13 @@ public class CarController : MonoBehaviour
     public Light frontLightRight;
     private bool lightsOn = false;
 
+    // Siren lights
+    public Light sirenLightLeft;
+    public Light sirenLightRight;
+    private float switchInterval = 0.75f; // Time interval for switching siren lights
+    private float timer = 0f; // Timer to control switching
+    private bool isSirenLightLeftOn = false;
+
     void Update()
     {
         // Handle car movement
@@ -26,6 +33,19 @@ public class CarController : MonoBehaviour
             lightsOn = !lightsOn;
             frontLightLeft.enabled = lightsOn;
             frontLightRight.enabled = lightsOn;
+        }
+
+        // Control alternating siren lights
+        timer += Time.deltaTime;
+        if (timer >= switchInterval)
+        {
+            // Alternate the siren lights
+            sirenLightLeft.enabled = !isSirenLightLeftOn;
+            sirenLightRight.enabled = isSirenLightLeftOn;
+            isSirenLightLeftOn = !isSirenLightLeftOn;
+
+            // Reset the timer
+            timer = 0f;
         }
     }
 }
