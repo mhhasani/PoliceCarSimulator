@@ -49,22 +49,30 @@ public class CarController : MonoBehaviour
         timer += Time.deltaTime;
         if (timer >= switchInterval)
         {
-            // Alternate the siren lights
-            sirenLightLeft.enabled = !isSirenLightLeftOn;
-            sirenLightRight.enabled = isSirenLightLeftOn;
-            isSirenLightLeftOn = !isSirenLightLeftOn;
-
-            // Reset the timer
-            timer = 0f;
+            if (!sirenActive) // Only alternate if the siren is not active
+            {
+                // Alternate the siren lights
+                sirenLightLeft.enabled = !isSirenLightLeftOn;
+                sirenLightRight.enabled = isSirenLightLeftOn;
+                isSirenLightLeftOn = !isSirenLightLeftOn;
+            }
+            timer = 0f; // Reset the timer
         }
 
-        // Toggle siren sound with Space key
+        // Toggle siren with Space key
         if (Input.GetKeyDown(KeyCode.Space))
         {
             sirenActive = !sirenActive;
 
             if (sirenActive)
             {
+                // Increase siren light intensity and enable both lights
+                sirenLightLeft.intensity = 20f;
+                sirenLightRight.intensity = 20f;
+                sirenLightLeft.enabled = true;
+                sirenLightRight.enabled = true;
+
+                // Play siren sound
                 if (sirenAudio != null && !sirenAudio.isPlaying)
                 {
                     sirenAudio.Play();
@@ -72,6 +80,11 @@ public class CarController : MonoBehaviour
             }
             else
             {
+                // Reset siren lights to alternating mode
+                sirenLightLeft.intensity = 5f;
+                sirenLightRight.intensity = 5f;
+
+                // Stop siren sound
                 if (sirenAudio != null && sirenAudio.isPlaying)
                 {
                     sirenAudio.Stop();
